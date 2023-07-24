@@ -10,9 +10,8 @@ Official PyTorch implementation (coming soon) for the paper:
 >
 > <a href='https://arxiv.org/abs/2307.11335'><img src='https://img.shields.io/badge/arXiv-2201.12576-red'></a> <a href='https://wbhu.github.io/projects/Tri-MipRF'><img src='https://img.shields.io/badge/Project-Video-Green'></a>
 
-<p align="center">
-<video src="assets/lego.mp4" width="98%"/>
-</p>
+https://github.com/wbhu/Tri-MipRF/assets/11834645/6c50baf7-ac46-46fd-a36f-172f99ea9054
+
 
 > <b>Instant-ngp (left)</b> suffers from aliasing in distant or low-resolution views and blurriness in
 > close-up shots, while <b>Tri-MipRF (right)</b> renders both fine-grained details in close-ups
