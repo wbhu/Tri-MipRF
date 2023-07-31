@@ -8,7 +8,7 @@ Official PyTorch implementation (coming soon) for the paper:
 >
 > Wenbo Hu, Yuling Wang, Lin Ma, Bangbang Yang, Lin Gao, Xiao Liu, Yuewen Ma
 >
-> <a href='https://arxiv.org/abs/2307.11335'><img src='https://img.shields.io/badge/arXiv-2201.12576-red'></a> <a href='https://wbhu.github.io/projects/Tri-MipRF'><img src='https://img.shields.io/badge/Project-Video-Green'></a>
+> <a href='https://arxiv.org/abs/2307.11335'><img src='https://img.shields.io/badge/arXiv-2307.11335-red'></a> <a href='https://wbhu.github.io/projects/Tri-MipRF'><img src='https://img.shields.io/badge/Project-Video-Green'></a>
 
 https://github.com/wbhu/Tri-MipRF/assets/11834645/6c50baf7-ac46-46fd-a36f-172f99ea9054
 
