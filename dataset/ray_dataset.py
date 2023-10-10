@@ -69,6 +69,10 @@ class RayDataset(Dataset):
             k: torch.tensor([x['lossmult'] for x in v])
             for k, v in data_source['frames'].items()
         }
+        self.file_names = {
+            k: [x['image_filename'].stem for x in v]
+            for k, v in data_source['frames'].items()
+        }
         self.to_world = to_world
         self.num_rays = num_rays
         self.render_bkgd = render_bkgd
@@ -169,12 +173,15 @@ class RayDataset(Dataset):
             target = target.reshape(
                 (self.cameras[cam_idx].height, self.cameras[cam_idx].width)
             )
-        return {
+        outputs = {
             # 'c2w': c2w,
             'cam_rays': cam_rays,
             'target': target,
             # 'idx': idx,
         }
+        if not self.training:
+            outputs['name'] = self.file_names[cam_idx][index]
+        return outputs
 
 
 def ray_collate(batch):
