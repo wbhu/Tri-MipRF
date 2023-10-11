@@ -1,6 +1,6 @@
 # Tri-MipRF
 
-Official PyTorch implementation (coming soon) for the paper:
+Official PyTorch implementation of the paper:
 
 > **Tri-MipRF: Tri-Mip Representation for Efficient Anti-Aliasing Neural Radiance Fields**
 >

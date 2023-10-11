@@ -1,16 +1,18 @@
 import time
 
 import gin
+import numpy as np
 import torch
 from pathlib import Path
 from loguru import logger
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from typing import Dict
+from typing import Dict, List
 
 from neural_field.model.RFModel import RFModel
 from utils.writer import TensorboardWriter
 from utils.colormaps import apply_depth_colormap
+import dataset.utils.io as data_io
 
 
 @gin.configurable()
@@ -175,13 +177,44 @@ class Trainer:
         return metrics, final_rb, target
 
     @torch.no_grad()
-    def eval(self):
+    def eval(
+        self,
+        save_results: bool = False,
+        rendering_channels: List[str] = ["rgb"],
+    ):
+        # ipdb.set_trace()
         logger.info("==> Start evaluation on testset ...")
+        if save_results:
+            res_dir = self.exp_dir / 'rendering'
+            res_dir.mkdir(parents=True, exist_ok=True)
+            results = {"names": []}
+            results.update({k: [] for k in rendering_channels})
+
         self.model.eval()
         metrics = []
         for idx, data in enumerate(tqdm(self.eval_loader)):
             metric, rb, target = self.eval_img(data)
             metrics.append(metric)
+            if save_results:
+                results["names"].append(data['name'])
+                for channel in rendering_channels:
+                    if hasattr(rb, channel):
+                        values = getattr(rb, channel).cpu().numpy()
+                        if 'depth' == channel:
+                            values = (values * 10000.0).astype(
+                                np.uint16
+                            )  # scale the depth by 10k, and save it as uint16 png images
+                        results[channel].append(values)
+                    else:
+                        raise NotImplementedError
+            del rb
+        if save_results:
+            for idx, name in enumerate(tqdm(results['names'])):
+                for channel in rendering_channels:
+                    channel_path = res_dir / channel
+                    data = results[channel][idx]
+                    data_io.write_rendering(data, channel_path, name)
+
         metrics = {k: [dct[k] for dct in metrics] for k in metrics[0]}
         logger.info("==> Evaluation done")
         for k, v in metrics.items():
