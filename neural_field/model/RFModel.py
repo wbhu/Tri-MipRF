@@ -5,7 +5,8 @@ import gin
 import torch
 from torch import nn
 import torch.nn.functional as F
-from torchmetrics.functional import peak_signal_noise_ratio
+from torchmetrics.functional import peak_signal_noise_ratio, structural_similarity_index_measure  # For torchmetrics lower version 2.0
+from torchmetrics.image import lpip, ssim, psnr  # For torchmetrics higher version 2.0
 
 from utils.ray import RayBundle
 from utils.render_buffer import RenderBuffer
@@ -107,6 +108,12 @@ class RFModel(nn.Module):
             'rendering_samples_actual': rendering_samples_actual,
             'num_rays': len(target),
         }
+        # initialize the metrics model
+        lpips = lpip.LearnedPerceptualImagePatchSimilarity(net_type='vgg')
+        pred = rb.rgb.permute(2, 0, 1).unsqueeze(0).cpu()
+        gt = target.rgb.permute(2, 0, 1).unsqueeze(0).cpu()
         # quality
-        quality = {'PSNR': peak_signal_noise_ratio(rb.rgb, target.rgb).item()}
+        quality = {'PSNR': peak_signal_noise_ratio(rb.rgb, target.rgb).item(),
+                   'SSIM': structural_similarity_index_measure(pred, gt).item(),
+                   'LPIPS': lpips(pred, gt).item()}
         return {**ray_info, **quality}
