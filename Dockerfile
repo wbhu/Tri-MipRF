@@ -11,6 +11,16 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get install -y \
+    ffmpeg \
+    libavformat-dev \
+    libavcodec-dev \
+    libavdevice-dev \
+    libavutil-dev \
+    libavfilter-dev \
+    libswscale-dev \
+    libswresample-dev
+
 # Install Python 3 (Ubuntu 22.04 comes with Python 3.10)
 RUN apt-get update && apt-get install -y python3 python3-pip
 
