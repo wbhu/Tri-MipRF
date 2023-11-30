@@ -13,7 +13,7 @@ jobs:
   build-docker-image:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && contains(github.event.*.labels.*.name, 'build docker'))
 
-    runs-on: buildjet-4vcpu-ubuntu-2204-arm
+    runs-on: buildjet-4vcpu-ubuntu-2204
 
     permissions:
       contents: read

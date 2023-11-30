@@ -9,9 +9,9 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     git \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y ffmpeg
 RUN apt-get install -y libavformat-dev
 RUN apt-get install -y libavcodec-dev
 RUN apt-get install -y libavdevice-dev
