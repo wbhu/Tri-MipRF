@@ -9,16 +9,27 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     git \
-    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y libavformat-dev
-RUN apt-get install -y libavcodec-dev
-RUN apt-get install -y libavdevice-dev
-RUN apt-get install -y libavutil-dev
-RUN apt-get install -y libavfilter-dev
-RUN apt-get install -y libswscale-dev
-RUN apt-get install -y libswresample-dev
+# install requirements for trimip -r requirements.txt
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    libavformat-dev \
+    libavcodec-dev \
+    libavdevice-dev \
+    libavutil-dev \
+    libavutil-dev \
+    libavfilter-dev \
+    libswscale-dev \
+    libswresample-dev
+
+# RUN apt-get install -y libavformat-dev
+# RUN apt-get install -y libavcodec-dev
+# RUN apt-get install -y libavdevice-dev
+# RUN apt-get install -y libavutil-dev
+# RUN apt-get install -y libavfilter-dev
+# RUN apt-get install -y libswscale-dev
+# RUN apt-get install -y libswresample-dev
 
 # Install Python 3 (Ubuntu 22.04 comes with Python 3.10)
 RUN apt-get update && apt-get install -y python3 python3-pip
