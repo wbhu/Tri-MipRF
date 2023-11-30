@@ -1,0 +1,52 @@
+name: Docker build & test
+
+on:
+  push:
+    branches:
+      - develop
+      - staging
+      - prod
+  pull_request:
+    types: [ synchronize, opened, reopened, labeled ]
+
+jobs:
+  build-docker-image:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && contains(github.event.*.labels.*.name, 'build docker'))
+
+    runs-on: buildjet-4vcpu-ubuntu-2204
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get image tag
+        shell: bash
+        run: |
+          echo "IMAGE_VERSION=pr-${{ github.event.pull_request.number }}-$(echo ${{github.sha}} | cut -c1-7)" >> $GITHUB_ENV
+      - name: Echo image tag
+        shell: bash
+        run: |
+         echo "using image tag: ${{ env.IMAGE_VERSION }}"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: joshpwrk/trimip:${{ env.IMAGE_VERSION }}
+          cache-from: type=registry,ref=joshpwrk/trimip:${{ env.IMAGE_VERSION }}
+          cache-to: type=inline
